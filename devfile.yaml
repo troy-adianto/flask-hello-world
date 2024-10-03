@@ -1,0 +1,32 @@
+schemaVersion: 2.2.2
+metadata:
+  name: flask-hello-world
+projects:
+  - name: flask-hello-world
+    git:
+      remotes:
+        origin: https://github.com/troy-adianto/flask-hello-world.git
+components:
+  - name: python
+    container:
+      image: registry.redhat.io/devspaces/udi-rhel8@sha256:9199796c9dd82a16ebb2c4ff8d06b9727f392eb93eb7ffa2974ad6c16e3d8e5d
+      volumeMounts:
+        - name: venv
+          path: /home/user/.venv
+      memoryLimit: 2Gi
+      memoryRequest: 1Gi
+      cpuLimit: '2'
+      cpuRequest: '1'
+      mountSources: true
+  - name: venv
+    volume:
+      size: 1G
+commands:
+  - id: run
+    exec:
+      label: Run the application
+      component: python
+      workingDir: ${PROJECTS_ROOT}/flask-hello-world
+      commandLine: python -m venv .venv && . .venv/bin/activate && python hello.py
+      group:
+        kind: run
